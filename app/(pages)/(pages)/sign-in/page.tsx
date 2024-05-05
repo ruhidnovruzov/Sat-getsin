@@ -5,7 +5,7 @@ import { BiSolidHide } from "react-icons/bi";
 import { BiSolidShow } from "react-icons/bi";
 import Link from "next/link";
 
-const sign_in = () => {
+const Sign_In = () => {
   const [emailPageVisible, setEmailPageVisible] = useState(true);
   const [phonePageVisible, setPhonePageVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -247,4 +247,4 @@ const sign_in = () => {
   );
 };
 
-export default sign_in;
+export default Sign_In;
