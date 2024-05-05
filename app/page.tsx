@@ -1,113 +1,233 @@
+"use client";
 import Image from "next/image";
+import real_estate from "@/public/assets/real-estate.png";
+import transport from "@/public/assets/transport.png";
+import garden from "@/public/assets/garden.png";
+import services from "@/public/assets/service.png";
+import fashion from "@/public/assets/fashion.png";
+import children from "@/public/assets/children.png";
+import electronics from "@/public/assets/electronics.png";
+import animals from "@/public/assets/animals.png";
+import sport from "@/public/assets/sport.png";
+import business from "@/public/assets/business.png";
+import vacancies from "@/public/assets/vacancies.png";
+import clock from "@/public/assets/date.svg";
+import location from "@/public/assets/location.svg";
+import { useState } from "react";
+import { useEffect } from "react";
+import search from "@/public/assets/search.png";
+import Navbar from "./components/navbar";
+import Link from "next/link";
 
 export default function Home() {
+  const [data, setData] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://api.npoint.io/f84817a5c4ad79222529"
+        );
+        if (!response.ok) {
+          throw new Error("Error");
+        }
+        const fetchedData = await response.json();
+        console.log(fetchedData);
+        setData(fetchedData);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
+  const handleShowAll = () => {
+    setSelectedCategory("");
+  };
+
+  const filteredProducts = selectedCategory
+    ? data.filter(
+        (product) =>
+          product.category === selectedCategory &&
+          product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : data.filter((product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+  const handleSearch = (event: any) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="w-full h-full bg-[#F6F8FE] relative pb-28">
+      <div className="w-[90%] m-auto  py-12">
+        {/* Categories */}
+
+        <div className="pt-24">
+          <h1 className="text-[30px] text-[#484B5E] font-bold">
+            Kateqoriya seçin
+          </h1>
+          <div className="pt-10">
+            <div className="flex pb-10">
+              <div className="flex flex-col justify-center items-center w-1/6 ">
+                <button onClick={() => handleCategoryChange("Daşınmaz əmlak")}>
+                  <Image
+                    src={real_estate}
+                    alt="real_estate"
+                    height={130}
+                    width={130}
+                  />
+                  <span>Daşınmaz əmlak</span>
+                </button>
+              </div>
+              <div className="flex flex-col justify-center items-center w-1/6 ">
+                <button onClick={() => handleCategoryChange("Nəqliyyat")}>
+                  <Image
+                    src={transport}
+                    alt="transport"
+                    height={130}
+                    width={130}
+                  />
+                  <span>Nəqliyyat</span>
+                </button>
+              </div>
+              <div className="flex flex-col justify-center items-center w-1/6 ">
+                <button onClick={() => handleCategoryChange("Ev və bağ")}>
+                  <Image src={garden} alt="garden" height={130} width={130} />
+                  <span>Ev və bağ üçün</span>
+                </button>
+              </div>
+              <div className="flex flex-col justify-center items-center w-1/6 ">
+                <button onClick={() => handleCategoryChange("Xidmətlər")}>
+                  <Image
+                    src={services}
+                    alt="services"
+                    height={130}
+                    width={130}
+                  />
+                  <span>Xidmətlər</span>
+                </button>
+              </div>
+              <div className="flex flex-col justify-center items-center w-1/6 ">
+                <button onClick={() => handleCategoryChange("Moda")}>
+                  <Image src={fashion} alt="fashion" height={130} width={130} />
+                  <span>Moda və stil</span>
+                </button>
+              </div>
+              <div className="flex flex-col justify-center items-center w-1/6 ">
+                <button onClick={() => handleCategoryChange("Uşaq")}>
+                  <Image
+                    src={children}
+                    alt="children"
+                    height={130}
+                    width={130}
+                  />
+                  <span>Uşaq aləmi</span>
+                </button>
+              </div>
+            </div>
+            <div className="flex">
+              <div className="flex flex-col justify-center items-center w-1/6 ">
+                <button onClick={() => handleCategoryChange("Elektronika")}>
+                  <Image
+                    src={electronics}
+                    alt="electronics"
+                    height={130}
+                    width={130}
+                  />
+                  <span>Elektronika və texnika</span>
+                </button>
+              </div>
+              <div className="flex flex-col justify-center items-center w-1/6 ">
+                <button onClick={() => handleCategoryChange("Heyvanlar")}>
+                  <Image src={animals} alt="animals" height={130} width={130} />
+                  <span>Heyvanlar</span>
+                </button>
+              </div>
+              <div className="flex flex-col justify-center items-center w-1/6 ">
+                <button onClick={() => handleCategoryChange("Hobbi")}>
+                  <Image src={sport} alt="sport" height={130} width={130} />
+                  <span>Hobbi,idman,asudə</span>
+                </button>
+              </div>
+              <div className="flex flex-col justify-center items-center w-1/6 ">
+                <button onClick={() => handleCategoryChange("Biznes")}>
+                  <Image
+                    src={business}
+                    alt="business"
+                    height={130}
+                    width={130}
+                  />
+                  <span>Biznes</span>
+                </button>
+              </div>
+              <div className="flex flex-col justify-center items-center w-1/6 ">
+                <button onClick={() => handleCategoryChange("Vakansiyalar")}>
+                  <Image
+                    src={vacancies}
+                    alt="vacancies"
+                    height={130}
+                    width={130}
+                  />
+                  <span>Vakansiyalar</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="pt-10">
+            <button onClick={handleShowAll}>
+              <h1 className="font-bold text-[30px] mt-24 mb-10">Elanlar</h1>
+            </button>
+
+            <div className="w-full relative h-10 mb-10">
+              <input
+                type="text"
+                placeholder="Axtaracağınız məhsul adını yazın"
+                className="outline-none placeholder:text-sm h-10 ml-4 w-[30%] pl-4 absolute right-0"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+              <Image src={search} alt="search" height={20} width={20} className="absolute right-2 top-3" />
+            </div>
+            <div className="flex flex-wrap gap-[91px] text-[#656569] -z-10">
+              {filteredProducts.map((items, index) => (
+                <div
+                  key={index}
+                  className="w-[20%] bg-white pb-9 rounded relative"
+                >
+                  <img
+                    src={items.image}
+                    alt=""
+                    className="h-56 w-full rounded"
+                  />
+                  <div className="p-4">
+                    <p className="w-[80%] font-bold">{items.name}</p>
+                    <p className="flex gap-1 text-sm mt-3">
+                      <Image src={location} alt="" height={25} width={25} />
+                      {items.city}
+                    </p>
+                    <p className="flex gap-1 text-sm ml-[2px]">
+                      <Image src={clock} alt="" height={20} width={20} />
+                      {items.date}
+                    </p>
+                    <p className="font-bold absolute bottom-5 right-5">
+                      {items.price + " " + items.unit}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
+        <div></div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </div>
   );
 }
