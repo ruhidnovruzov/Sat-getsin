@@ -1,10 +1,10 @@
-'use client'
+"use client";
 import React from "react";
 import Image from "next/image";
 import facebook from "@/public/assets/facebook.png";
 import instagram from "@/public/assets/instagram.png";
-import call from '@/public/assets/call.png'
-import profile from  "@/public/assets/profile.png"
+import call from "@/public/assets/call.png";
+import profile from "@/public/assets/profile.png";
 import category from "@/public/assets/category.png";
 import search from "@/public/assets/search.png";
 import fav from "@/public/assets/fav.png";
@@ -13,63 +13,116 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import vector from "@/public/assets/Vector (2).svg";
 import Link from "next/link";
 import { useState } from "react";
+import { useStore } from "../store/useStore";
+import "./menu.css";
 
 const Navbar = () => {
-
   const [isOpen, setIsOpen] = useState(false);
-  const [isNestedOpen, setIsNestedOpen] = useState(false)
+  const [isNestedOpen, setIsNestedOpen] = useState(false);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const { setSelectedCategory, searchTerm, setSearchTerm } = useStore();
 
+  const toggleHMenu = () => {
+    setIsOpenMenu(!isOpenMenu);
+  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-    if(!isOpen&& isNestedOpen){
-      setIsNestedOpen(!isNestedOpen)
+    if (!isOpen && isNestedOpen) {
+      setIsNestedOpen(!isNestedOpen);
     }
   };
 
-  const nestedToggleMenu = () =>{
-    setIsNestedOpen(!isNestedOpen)
-  }
+  const nestedToggleMenu = () => {
+    setIsNestedOpen(!isNestedOpen);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setIsOpen(!isOpen);
+  };
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
 
   return (
-    <div>
-      <nav>
-        <header className="flex py-6 w-[90%] m-auto">
-          <div className="flex w-full justify-between">
-          <div className="flex w-[40%] justify-between">
-          <div className="flex gap-4 h-6">
-          <Image src={facebook} alt="facebook" width={10} height={10} />
-          <Image src={instagram} alt="instagram" width={20} height={20} />
-          </div>
-          <div className="flex gap-3 h-6">
-          <Image src={call} alt="call" width={20} height={20} />
-          <span className="text-[#84879A]">(+994) 70 256 24 89</span>
-          </div>
-          <div>
-            <p className="text-[#84879A]">Yardım və dəstək</p>
-          </div>
-          </div>
-          <div className="flex gap-3">
-            <Image src={profile} alt="profile" width={30} height={30}/>
-            <div className="flex text-[#84879A] items-center gap-2">
+    <div className="max-sm:bg-[#F6F8FE] ">
+      <nav className=" max-sm:fixed max-sm:z-10 max-sm:w-full max-sm:top-0">
+        <div className="hamburger-menu">
+          <input
+            type="checkbox"
+            id="menu-toggle"
+            checked={isOpenMenu}
+            onChange={toggleHMenu}
+          />
+          <label htmlFor="menu-toggle" className="menu-icon">
+            &#9776;
+          </label>
+          <ul className={`menu ${isOpenMenu ? "open" : ""}`}>
+            <li>
+              <Link href="../">Ana səhifə</Link>
+            </li>
+            <li>
+              <Link href="#">Yardım və dəstək</Link>
+            </li>
+            <li>
+              <Link href="#">Əlaqə</Link>
+            </li>
+            <li>
               <Link href="/sign-in">Giriş</Link>
-              <div className="w-[1px] h-4 bg-[#84879A]"></div>
-              <p>Qeydiyyat</p>
+            </li>
+            <li>
+              <Link href="/sign-in">Qeydiyyat</Link>
+            </li>
+          </ul>
+        </div>
+        <header className="flex py-6  w-[90%] m-auto">
+          <div className="flex w-full justify-between max-sm:hidden relative">
+            <div className="flex w-[40%] justify-between max-sm:justify-normal">
+              <div className="flex gap-4 h-5">
+                <Image src={facebook} alt="facebook" width={10} height={10} />
+                <Image src={instagram} alt="instagram" width={20} height={20} />
+              </div>
+              <div className="flex gap-3 h-5 max-sm:ml-4">
+                <Image src={call} alt="call" width={20} height={20} />
+                <span className="text-[#84879A] max-sm:hidden">
+                  (+994) 70 256 24 89
+                </span>
+              </div>
+              <div>
+                <p className="text-[#84879A] max-sm:hidden">Yardım və dəstək</p>
+              </div>
             </div>
-          </div>
+            <div className="flex gap-3">
+              <Image
+                src={profile}
+                alt="profile"
+                className=""
+                width={30}
+                height={30}
+              />
+              <div className="flex text-[#84879A] items-center gap-2">
+                <Link href="/sign-in">Giriş</Link>
+                <div className="w-[1px] h-4 bg-[#84879A]"></div>
+                <p>Qeydiyyat</p>
+              </div>
+            </div>
           </div>
         </header>
       </nav>
-      <div className=" bg-[#F6F8FE]">
-      <div className="flex items-center justify-between pt-12 w-[90%] m-auto">
+      <div className=" bg-[#F6F8FE] max-sm:mt-12 max-sm:pt-10">
+        <div className="flex items-center justify-between max-sm:pt-0 pt-12 w-[90%] m-auto">
           <div className="flex">
-            <Link href='../'><h1 className="text-[24px] text-[#6B5959]">Logo</h1></Link>
+            <Link href="../">
+              <h1 className="text-[24px] text-[#6B5959]">Logo</h1>
+            </Link>
           </div>
-          <div className="flex border-[1px] border-[#E7EAE7] h-12 items-center px-2 bg-white gap-5 rounded-[5px] w-[50%] pr-3">
+          <div className="flex border-[1px] border-[#E7EAE7] h-12 items-center px-2 bg-white gap-5 rounded-[5px] w-[50%] pr-3 max-sm:hidden">
             <div className="flex h-6 gap-3 p-1 items-center">
               <button className="flex gap-3" onClick={toggleMenu}>
                 <Image src={category} alt="Category" height={20} width={20} />
-                <span className="text-[#484B5E] text-nowrap text-sm">
+                <span className="text-[#484B5E] text-nowrap text-sm max-sm:hidden">
                   Kateqoriya seçin
                 </span>
               </button>
@@ -79,15 +132,23 @@ const Navbar = () => {
               type="text"
               placeholder="Axtaracağınız məhsul,elan,kateqoriyanı yazın"
               className="outline-none placeholder:text-sm ml-4 w-full"
+              value={searchTerm}
+              onChange={handleSearch}
             />
+
             <Image src={search} alt="search" height={20} width={20} />
           </div>
           <div className="flex items-center gap-2">
-            <Image src={fav} alt="fav" height={20} width={20} />
-            <span className="text-sm text-[#484B5E]">Seçilənlər</span>
+            <button className="flex gap-1 items-center">
+              <Image src={fav} alt="fav" height={20} width={20} />
+              <span className="text-sm text-[#484B5E]">Seçilənlər</span>
+            </button>
           </div>
           <div>
-            <Link href="/new" className="rounded-[5px] bg-[#6A5BCD] flex items-center gap-3 p-2 text-white text-sm">
+            <Link
+              href="/new"
+              className="rounded-[5px] bg-[#6A5BCD] flex items-center gap-3 p-2 text-white text-sm"
+            >
               <Image src={add} alt="add" height={15} width={15} />
               <span>Yeni elan</span>
             </Link>
@@ -97,7 +158,10 @@ const Navbar = () => {
         {isOpen && (
           <div className="left-0 w-full bg-white absolute  z-50 border border-[#C4C4C4] rounded-b-[15px] px-16 py-10">
             <ul className="flex flex-col gap-y-4">
-              <li className="flex justify-between w-1/4 text-[#7D8092]">
+              <li
+                className="flex justify-between w-1/4 text-[#7D8092] "
+                onClick={() => handleCategoryChange("Ev və bağ")}
+              >
                 <Link href="" className="flex gap-4">
                   <svg
                     width="28"
@@ -118,7 +182,10 @@ const Navbar = () => {
                   <Image src={vector} alt="vector" height={8} width={8} />
                 </button>
               </li>
-              <li className="flex justify-between w-1/4 text-[#7D8092]">
+              <li
+                className="flex justify-between w-1/4 text-[#7D8092]"
+                onClick={() => handleCategoryChange("Elektronika")}
+              >
                 <Link href="" className="flex gap-4">
                   <svg
                     width="28"
@@ -140,35 +207,45 @@ const Navbar = () => {
                 </button>
               </li>
               <div className="flex relative">
-              <li className="flex justify-between w-1/4 text-[#7D8092]">
-                <Link href="" className="flex gap-4">
-                  <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 28 28"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect width="28" height="28" rx="14" fill="#DFEEFF" />
-                    <path
-                      d="M21.875 19.625H21.3125V12.3125C21.3125 12.0141 21.194 11.728 20.983 11.517C20.772 11.306 20.4859 11.1875 20.1875 11.1875H15.6875V7.8125C15.6875 7.51413 15.569 7.22798 15.358 7.017C15.147 6.80603 14.8609 6.6875 14.5625 6.6875H7.8125C7.51413 6.6875 7.22798 6.80603 7.017 7.017C6.80603 7.22798 6.6875 7.51413 6.6875 7.8125V19.625H6.125C5.97582 19.625 5.83274 19.6843 5.72725 19.7898C5.62176 19.8952 5.5625 20.0383 5.5625 20.1875C5.5625 20.3367 5.62176 20.4798 5.72725 20.5852C5.83274 20.6907 5.97582 20.75 6.125 20.75H21.875C22.0242 20.75 22.1673 20.6907 22.2727 20.5852C22.3782 20.4798 22.4375 20.3367 22.4375 20.1875C22.4375 20.0383 22.3782 19.8952 22.2727 19.7898C22.1673 19.6843 22.0242 19.625 21.875 19.625ZM13.4375 14.5625C13.4375 14.7117 13.3782 14.8548 13.2727 14.9602C13.1673 15.0657 13.0242 15.125 12.875 15.125H10.625C10.4758 15.125 10.3327 15.0657 10.2273 14.9602C10.1218 14.8548 10.0625 14.7117 10.0625 14.5625C10.0625 14.4133 10.1218 14.2702 10.2273 14.1648C10.3327 14.0593 10.4758 14 10.625 14H12.875C13.0242 14 13.1673 14.0593 13.2727 14.1648C13.3782 14.2702 13.4375 14.4133 13.4375 14.5625ZM9.5 9.5H11.75C11.8992 9.5 12.0423 9.55926 12.1477 9.66475C12.2532 9.77024 12.3125 9.91332 12.3125 10.0625C12.3125 10.2117 12.2532 10.3548 12.1477 10.4602C12.0423 10.5657 11.8992 10.625 11.75 10.625H9.5C9.35082 10.625 9.20774 10.5657 9.10225 10.4602C8.99676 10.3548 8.9375 10.2117 8.9375 10.0625C8.9375 9.91332 8.99676 9.77024 9.10225 9.66475C9.20774 9.55926 9.35082 9.5 9.5 9.5ZM9.5 16.8125H11.75C11.8992 16.8125 12.0423 16.8718 12.1477 16.9773C12.2532 17.0827 12.3125 17.2258 12.3125 17.375C12.3125 17.5242 12.2532 17.6673 12.1477 17.7727C12.0423 17.8782 11.8992 17.9375 11.75 17.9375H9.5C9.35082 17.9375 9.20774 17.8782 9.10225 17.7727C8.99676 17.6673 8.9375 17.5242 8.9375 17.375C8.9375 17.2258 8.99676 17.0827 9.10225 16.9773C9.20774 16.8718 9.35082 16.8125 9.5 16.8125ZM15.6875 12.3125H20.1875V19.625H15.6875V12.3125ZM19.0625 17.375C19.0625 17.5242 19.0032 17.6673 18.8977 17.7727C18.7923 17.8782 18.6492 17.9375 18.5 17.9375H17.375C17.2258 17.9375 17.0827 17.8782 16.9773 17.7727C16.8718 17.6673 16.8125 17.5242 16.8125 17.375C16.8125 17.2258 16.8718 17.0827 16.9773 16.9773C17.0827 16.8718 17.2258 16.8125 17.375 16.8125H18.5C18.6492 16.8125 18.7923 16.8718 18.8977 16.9773C19.0032 17.0827 19.0625 17.2258 19.0625 17.375ZM16.8125 14.5625C16.8125 14.4133 16.8718 14.2702 16.9773 14.1648C17.0827 14.0593 17.2258 14 17.375 14H18.5C18.6492 14 18.7923 14.0593 18.8977 14.1648C19.0032 14.2702 19.0625 14.4133 19.0625 14.5625C19.0625 14.7117 19.0032 14.8548 18.8977 14.9602C18.7923 15.0657 18.6492 15.125 18.5 15.125H17.375C17.2258 15.125 17.0827 15.0657 16.9773 14.9602C16.8718 14.8548 16.8125 14.7117 16.8125 14.5625Z"
-                      fill="#82ACEF"
-                    />
-                  </svg>
-                  Daşınmaz əmlak
-                </Link>
-                <button onClick={nestedToggleMenu}>
-                  {
-                    <>
-                    {isNestedOpen ? <RiArrowDropDownLine className="text-[#A8A8AA] text-[30px]" /> : <Image src={vector} alt="vector" height={8} width={8} />}
-                  
-                    </>
-                  }
-                </button>
-              </li>
-              {
-                  isNestedOpen && (
-                    <div className="absolute left-[28%] flex">
+                <li
+                  className="flex justify-between w-1/4 text-[#7D8092]"
+                  onClick={() => handleCategoryChange("Daşınmaz əmlak")}
+                >
+                  <Link href="" className="flex gap-4">
+                    <svg
+                      width="28"
+                      height="28"
+                      viewBox="0 0 28 28"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect width="28" height="28" rx="14" fill="#DFEEFF" />
+                      <path
+                        d="M21.875 19.625H21.3125V12.3125C21.3125 12.0141 21.194 11.728 20.983 11.517C20.772 11.306 20.4859 11.1875 20.1875 11.1875H15.6875V7.8125C15.6875 7.51413 15.569 7.22798 15.358 7.017C15.147 6.80603 14.8609 6.6875 14.5625 6.6875H7.8125C7.51413 6.6875 7.22798 6.80603 7.017 7.017C6.80603 7.22798 6.6875 7.51413 6.6875 7.8125V19.625H6.125C5.97582 19.625 5.83274 19.6843 5.72725 19.7898C5.62176 19.8952 5.5625 20.0383 5.5625 20.1875C5.5625 20.3367 5.62176 20.4798 5.72725 20.5852C5.83274 20.6907 5.97582 20.75 6.125 20.75H21.875C22.0242 20.75 22.1673 20.6907 22.2727 20.5852C22.3782 20.4798 22.4375 20.3367 22.4375 20.1875C22.4375 20.0383 22.3782 19.8952 22.2727 19.7898C22.1673 19.6843 22.0242 19.625 21.875 19.625ZM13.4375 14.5625C13.4375 14.7117 13.3782 14.8548 13.2727 14.9602C13.1673 15.0657 13.0242 15.125 12.875 15.125H10.625C10.4758 15.125 10.3327 15.0657 10.2273 14.9602C10.1218 14.8548 10.0625 14.7117 10.0625 14.5625C10.0625 14.4133 10.1218 14.2702 10.2273 14.1648C10.3327 14.0593 10.4758 14 10.625 14H12.875C13.0242 14 13.1673 14.0593 13.2727 14.1648C13.3782 14.2702 13.4375 14.4133 13.4375 14.5625ZM9.5 9.5H11.75C11.8992 9.5 12.0423 9.55926 12.1477 9.66475C12.2532 9.77024 12.3125 9.91332 12.3125 10.0625C12.3125 10.2117 12.2532 10.3548 12.1477 10.4602C12.0423 10.5657 11.8992 10.625 11.75 10.625H9.5C9.35082 10.625 9.20774 10.5657 9.10225 10.4602C8.99676 10.3548 8.9375 10.2117 8.9375 10.0625C8.9375 9.91332 8.99676 9.77024 9.10225 9.66475C9.20774 9.55926 9.35082 9.5 9.5 9.5ZM9.5 16.8125H11.75C11.8992 16.8125 12.0423 16.8718 12.1477 16.9773C12.2532 17.0827 12.3125 17.2258 12.3125 17.375C12.3125 17.5242 12.2532 17.6673 12.1477 17.7727C12.0423 17.8782 11.8992 17.9375 11.75 17.9375H9.5C9.35082 17.9375 9.20774 17.8782 9.10225 17.7727C8.99676 17.6673 8.9375 17.5242 8.9375 17.375C8.9375 17.2258 8.99676 17.0827 9.10225 16.9773C9.20774 16.8718 9.35082 16.8125 9.5 16.8125ZM15.6875 12.3125H20.1875V19.625H15.6875V12.3125ZM19.0625 17.375C19.0625 17.5242 19.0032 17.6673 18.8977 17.7727C18.7923 17.8782 18.6492 17.9375 18.5 17.9375H17.375C17.2258 17.9375 17.0827 17.8782 16.9773 17.7727C16.8718 17.6673 16.8125 17.5242 16.8125 17.375C16.8125 17.2258 16.8718 17.0827 16.9773 16.9773C17.0827 16.8718 17.2258 16.8125 17.375 16.8125H18.5C18.6492 16.8125 18.7923 16.8718 18.8977 16.9773C19.0032 17.0827 19.0625 17.2258 19.0625 17.375ZM16.8125 14.5625C16.8125 14.4133 16.8718 14.2702 16.9773 14.1648C17.0827 14.0593 17.2258 14 17.375 14H18.5C18.6492 14 18.7923 14.0593 18.8977 14.1648C19.0032 14.2702 19.0625 14.4133 19.0625 14.5625C19.0625 14.7117 19.0032 14.8548 18.8977 14.9602C18.7923 15.0657 18.6492 15.125 18.5 15.125H17.375C17.2258 15.125 17.0827 15.0657 16.9773 14.9602C16.8718 14.8548 16.8125 14.7117 16.8125 14.5625Z"
+                        fill="#82ACEF"
+                      />
+                    </svg>
+                    Daşınmaz əmlak
+                  </Link>
+                  <button onClick={nestedToggleMenu}>
+                    {
+                      <>
+                        {isNestedOpen ? (
+                          <RiArrowDropDownLine className="text-[#A8A8AA] text-[30px]" />
+                        ) : (
+                          <Image
+                            src={vector}
+                            alt="vector"
+                            height={8}
+                            width={8}
+                          />
+                        )}
+                      </>
+                    }
+                  </button>
+                </li>
+                {isNestedOpen && (
+                  <div className="absolute left-[28%] flex">
                     <ul className="flex flex-col gap-y-4">
                       <li className="text-[#7D8092]">Mənzillər</li>
                       <li className="text-[#7D8092]">Villalar</li>
@@ -177,11 +254,13 @@ const Navbar = () => {
                       <li className="text-[#7D8092]">Obyekt və ofislər</li>
                       <li className="text-[#7D8092]">Torpaq sahələri</li>
                     </ul>
-                    </div>
-                  )
-                }
-                </div>
-              <li className="flex justify-between w-1/4 text-[#7D8092]">
+                  </div>
+                )}
+              </div>
+              <li
+                className="flex justify-between w-1/4 text-[#7D8092]"
+                onClick={() => handleCategoryChange("Nəqliyyat")}
+              >
                 <Link href="" className="flex gap-4">
                   <svg
                     width="28"
@@ -202,7 +281,10 @@ const Navbar = () => {
                   <Image src={vector} alt="vector" height={8} width={8} />
                 </button>
               </li>
-              <li className="flex justify-between w-1/4 text-[#7D8092]">
+              <li
+                className="flex justify-between w-1/4 text-[#7D8092]"
+                onClick={() => handleCategoryChange("Şəxsi əşyalar")}
+              >
                 <Link href="" className="flex gap-4">
                   <svg
                     width="28"
@@ -225,7 +307,10 @@ const Navbar = () => {
                   <Image src={vector} alt="vector" height={8} width={8} />
                 </button>
               </li>
-              <li className="flex justify-between w-1/4 text-[#7D8092]">
+              <li
+                className="flex justify-between w-1/4 text-[#7D8092]"
+                onClick={() => handleCategoryChange("Hobbi")}
+              >
                 <Link href="" className="flex gap-4">
                   <svg
                     width="28"
@@ -246,7 +331,10 @@ const Navbar = () => {
                   <Image src={vector} alt="vector" height={8} width={8} />
                 </button>
               </li>
-              <li className="flex justify-between w-1/4 text-[#7D8092]">
+              <li
+                className="flex justify-between w-1/4 text-[#7D8092]"
+                onClick={() => handleCategoryChange("Uşaq")}
+              >
                 <Link href="" className="flex gap-4">
                   <svg
                     width="28"
@@ -267,7 +355,10 @@ const Navbar = () => {
                   <Image src={vector} alt="vector" height={8} width={8} />
                 </button>
               </li>
-              <li className="flex justify-between w-1/4 text-[#7D8092]">
+              <li
+                className="flex justify-between w-1/4 text-[#7D8092]"
+                onClick={() => handleCategoryChange("Heyvanlar")}
+              >
                 <Link href="" className="flex gap-4">
                   <svg
                     width="28"
@@ -288,7 +379,10 @@ const Navbar = () => {
                   <Image src={vector} alt="vector" height={8} width={8} />
                 </button>
               </li>
-              <li className="flex justify-between w-1/4 text-[#7D8092]">
+              <li
+                className="flex justify-between w-1/4 text-[#7D8092]"
+                onClick={() => handleCategoryChange("Vakansiyalar")}
+              >
                 <Link href="" className="flex gap-4">
                   <svg
                     width="28"
@@ -309,7 +403,10 @@ const Navbar = () => {
                   <Image src={vector} alt="vector" height={8} width={8} />
                 </button>
               </li>
-              <li className="flex justify-between w-1/4 text-[#7D8092]">
+              <li
+                className="flex justify-between w-1/4 text-[#7D8092]"
+                onClick={() => handleCategoryChange("")}
+              >
                 <Link href="" className="flex gap-4">
                   <svg
                     width="28"
@@ -333,9 +430,8 @@ const Navbar = () => {
             </ul>
           </div>
         )}
+      </div>
     </div>
-    </div>
-
   );
 };
 
